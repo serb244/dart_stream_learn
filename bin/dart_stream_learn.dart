@@ -1,7 +1,30 @@
 import 'dart:async';
 
 void main() {
-  streamClassicDoubleSubscriptionAwait();
+  streamControllerClassic();
+}
+
+void streamControllerClassic() {
+  StreamController<int> controller = StreamController();
+  StreamSubscription sub;
+  controller.add(1);
+  controller.add(2);
+  controller.add(3);
+  controller.add(4);
+  sub = controller.stream.listen((event) {
+    print(event);
+  });
+  controller.add(5);
+  controller.add(6);
+  controller.add(7);
+  Future.delayed(
+    Duration(seconds: 5),
+    () {
+      controller.add(8);
+      controller.close();
+      sub.cancel();
+    },
+  );
 }
 
 void streamClassicDoubleSubscriptionAwait() {
