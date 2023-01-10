@@ -1,7 +1,85 @@
 import 'dart:async';
 
 void main() {
-  streamControllerConstructorSync();
+  streamDataSubscription();
+}
+
+void streamDataSubscription() async {
+  StreamSubscription sub;
+  List<String> fetchCityList() {
+    print("[SIMULATED NETWORK I/O]");
+    return [
+      'Bangkok',
+      'Beijing',
+      'Cairo',
+      'Delhi',
+      'Guangzhou',
+      'Jakarta',
+      'Kolkāta',
+      'Manila',
+      'Mexico City',
+      'Moscow',
+      'Mumbai',
+      'New York',
+      'São Paulo',
+      'Seoul',
+      'Shanghai',
+      'Tokyo'
+    ];
+  }
+
+  Stream<String> loadCityStream() async* {
+    for (final city in fetchCityList()) {
+      await Future.delayed(Duration(milliseconds: 500));
+      yield city;
+    }
+  }
+
+  sub = loadCityStream().listen((event) {
+    print(event);
+  }, onDone: () => print('all done'));
+  await Future.delayed(Duration(seconds: 1));
+  sub.pause();
+  await Future.delayed(Duration(seconds: 2));
+  sub.resume();
+  await Future.delayed(Duration(seconds: 5));
+  sub.cancel();
+}
+
+void streamData() async {
+  List<String> fetchCityList() {
+    print("[SIMULATED NETWORK I/O]");
+    return [
+      'Bangkok',
+      'Beijing',
+      'Cairo',
+      'Delhi',
+      'Guangzhou',
+      'Jakarta',
+      'Kolkāta',
+      'Manila',
+      'Mexico City',
+      'Moscow',
+      'Mumbai',
+      'New York',
+      'São Paulo',
+      'Seoul',
+      'Shanghai',
+      'Tokyo'
+    ];
+  }
+
+  Stream<String> loadCityStream() async* {
+    for (final city in fetchCityList()) {
+      await Future.delayed(Duration(milliseconds: 500));
+      yield city;
+    }
+  }
+
+  print(loadCityStream.runtimeType);
+  await for (final city in loadCityStream()) {
+    print(city);
+  }
 }
 
 void streamControllerConstructorSync() {
