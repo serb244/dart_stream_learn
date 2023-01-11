@@ -1,7 +1,63 @@
 import 'dart:async';
 
+class TmpData {
+  final int id;
+  final String name;
+
+  const TmpData({
+    required this.id,
+    required this.name,
+  });
+  @override
+  String toString() {
+    return 'TmpData: {id: ${id}, name: ${name}}';
+  }
+}
+
+const List<TmpData> tmpList = [
+  TmpData(id: 1, name: 'name'),
+  TmpData(id: 2, name: 'name'),
+  TmpData(id: 3, name: 'name'),
+  TmpData(id: 4, name: 'name'),
+];
+List<String> fetchCityList() {
+  print("[SIMULATED NETWORK I/O]");
+  return [
+    'Bangkok',
+    'Beijing',
+    'Cairo',
+    'Delhi',
+    'Guangzhou',
+    'Jakarta',
+    'Kolkāta',
+    'Manila',
+    'Mexico City',
+    'Moscow',
+    'Mumbai',
+    'New York',
+    'São Paulo',
+    'Seoul',
+    'Shanghai',
+    'Tokyo'
+  ];
+}
+
 void main() {
-  streamYield();
+  streamYieldData();
+}
+
+void streamYieldData() {
+  StreamSubscription sub;
+  Stream<TmpData> countStream(List<TmpData> tmpList) async* {
+    for (TmpData i in tmpList) {
+      await Future.delayed(Duration(seconds: 1));
+      yield i;
+    }
+  }
+
+  sub = countStream(tmpList).listen((event) {
+    print(event);
+  });
 }
 
 void streamYield() {
@@ -20,27 +76,6 @@ void streamYield() {
 
 void streamDataSubscription() async {
   StreamSubscription sub;
-  List<String> fetchCityList() {
-    print("[SIMULATED NETWORK I/O]");
-    return [
-      'Bangkok',
-      'Beijing',
-      'Cairo',
-      'Delhi',
-      'Guangzhou',
-      'Jakarta',
-      'Kolkāta',
-      'Manila',
-      'Mexico City',
-      'Moscow',
-      'Mumbai',
-      'New York',
-      'São Paulo',
-      'Seoul',
-      'Shanghai',
-      'Tokyo'
-    ];
-  }
 
   Stream<String> loadCityStream() async* {
     for (final city in fetchCityList()) {
