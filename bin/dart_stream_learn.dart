@@ -43,7 +43,7 @@ List<String> fetchCityList() {
 }
 
 void main() {
-  streamYieldData();
+  streamYieldFunction();
 }
 
 void streamYieldData() {
@@ -58,6 +58,34 @@ void streamYieldData() {
   sub = countStream(tmpList).listen((event) {
     print(event);
   });
+}
+
+void streamYieldFunction() async {
+  Stream<int> countStream(int max) async* {
+    for (int i = 0; i < max; i++) {
+      await Future.delayed(Duration(seconds: 1));
+      yield i;
+      if (i > 5) return;
+    }
+  }
+
+  Future<int> sumStream(Stream<int> stream) async {
+    int sum = 0;
+    await for (int value in stream) {
+      print(value);
+      sum += value;
+    }
+    return sum;
+  }
+
+  /// Initialize a stream of integers 0-9
+  Stream<int> stream = countStream(10);
+
+  /// Compute the sum of the stream of integers
+  int sum = await sumStream(stream);
+
+  /// Print the sum
+  print(sum); // 45
 }
 
 void streamYield() {
