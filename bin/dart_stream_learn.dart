@@ -1,7 +1,21 @@
 import 'dart:async';
 
 void main() {
-  streamDataSubscription();
+  streamYield();
+}
+
+void streamYield() {
+  StreamSubscription sub;
+  Stream<int> countStream(int max) async* {
+    for (int i = 0; i < max; i++) {
+      await Future.delayed(Duration(seconds: 1));
+      yield i;
+    }
+  }
+
+  sub = countStream(10).listen((event) {
+    print(event);
+  });
 }
 
 void streamDataSubscription() async {
